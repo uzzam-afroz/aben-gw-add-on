@@ -38,17 +38,17 @@ if (is_aben_active()) {
 }
 
 /**
- * Outputs a custom Apply button with a magic login link.
+ * Outputs a custom Apply button
  *
  * @param string $link The URL to which the apply button should redirect.
  */
 function aben_gw_apply_button($link)
 {
     ?>
-<div style="width:20%; display:inline-block; align-self:center;">
+<div style="width:20%; display:inline-block; align-self:center;  margin-left:20px;">
     <a href="<?php echo esc_url($link); ?>/?email={{USER_EMAIL}}&token={{TOKEN}}" target="_blank"
         rel="noopener noreferrer"
-        style=" display: inline-block; padding: 10px 20px; color: #fff; text-decoration: none; background: #2271b1;">
+        style=" display: inline-block; padding: 10px 18px; color: #fff; text-decoration: none; background: #02af5d; border-radius:50vw;">
         Apply
     </a>
 </div>
@@ -80,9 +80,6 @@ function aben_generate_login_token($user_email)
         $token = wp_generate_password(40, false);
         $expiry = DAY_IN_SECONDS * 30;
 
-        // Log the generated token for debugging.
-        error_log('Generated Token: ' . $token);
-
         // Store the token as a transient.
         set_transient('aben_login_token_' . md5($user->user_email), $token, $expiry);
     }
@@ -104,14 +101,8 @@ function aben_handle_auto_login()
         $token = sanitize_text_field($_GET['token']);
         $user_email = sanitize_email($_GET['email']);
 
-        // Log the token from the URL for debugging.
-        error_log('Token from URL: ' . $token);
-
         // Retrieve the stored token from the transient.
         $stored_token = get_transient('aben_login_token_' . md5($user_email));
-
-        // Log the stored token for debugging.
-        error_log('Stored Token: ' . $stored_token);
 
         // Retrieve the user by email.
         $user = get_user_by('email', $user_email);
