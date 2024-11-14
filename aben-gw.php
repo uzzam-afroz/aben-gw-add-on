@@ -45,7 +45,7 @@ if (is_aben_active()) {
 function aben_gw_apply_button($link)
 {
     ?>
-<div style="width:20%; display:inline-block; align-self:center;  margin-left:20px;">
+<div style="width:20%; display:inline-block; align-self:center;  margin-left:20px; text-align:right">
     <a href="<?php echo esc_url($link); ?>/?email={{USER_EMAIL}}&token={{TOKEN}}" target="_blank"
         rel="noopener noreferrer"
         style=" display: inline-block; padding: 10px 18px; color: #fff; text-decoration: none; background: #02af5d; border-radius:50vw;">
