@@ -45,8 +45,8 @@ if (is_aben_active()) {
 function aben_gw_apply_button($link)
 {
     ?>
-<div style="width:20%; display:inline-block; align-self:center;  margin-left:20px; text-align:right">
-    <a href="<?php echo esc_url($link); ?>/?email={{USER_EMAIL}}&token={{TOKEN}}" target="_blank"
+<div style="width:20%; display:block; margin-top:auto; margin-bottom:auto; margin-left:20px; text-align:right;">
+    <a href="<?php echo esc_url($link); ?>?email={{USER_EMAIL}}&token={{TOKEN}}" target="_blank"
         rel="noopener noreferrer"
         style=" display: inline-block; padding: 10px 18px; color: #fff; text-decoration: none; background: #02af5d; border-radius:50vw;">
         Apply
@@ -134,4 +134,19 @@ function aben_handle_auto_login()
         // No query parameters, do nothing.
         return;
     }
+}
+
+add_filter('aben_post_featured_image_url_filter', 'aben_gw_featured_image', 10, 2);
+
+function aben_gw_featured_image($url, $post_id) {
+    $default_image = plugin_dir_url(__FILE__) . 'assets/img/logo_placeholder.jpg';
+
+    $author_logo = wp_get_attachment_url(
+        get_user_meta(get_post_field('post_author', $post_id), 'consultancy-logo', true)
+    );
+
+    // Check if the URL is valid and return fallback if not
+    return (!empty($author_logo) && filter_var($author_logo, FILTER_VALIDATE_URL)) 
+        ? $author_logo 
+        : $default_image;
 }
