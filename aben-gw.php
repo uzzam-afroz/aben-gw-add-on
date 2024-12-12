@@ -2,9 +2,10 @@
 
 /**
  * Plugin Name:       Aben GW Add-On
- * Description:       Adds features to the Aben plugin specific to GW.
+ * Description:       Enables magic login for users via link in email, sending automatic emails to users for profile completion and adds apply now button.
  * Version:           1.0.0
  * Author:            Zamy
+ * Author URI:        https://zamy.dev
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       aben
@@ -15,6 +16,21 @@ if (!defined('ABSPATH')) {
     // Exit if accessed directly.
     exit;
 }
+if (!defined('ABEN_GW_PATH')) {
+    define('ABEN_GW_PATH', plugin_dir_path( __FILE__ ));
+}
+
+if (!defined('ABEN_GW_URL')) {
+    define('ABEN_GW_URL', plugin_dir_url( __FILE__ ));
+}
+
+require_once ABEN_GW_PATH . 'profile-completion-email/profile-completion-email.php';
+
+register_activation_hook( __FILE__, function () {
+    if(! wp_next_scheduled( 'gw_profile_cron_hook' )) {
+        wp_schedule_event(time(), 'gw_every_week', 'gw_profile_cron_hook');
+    }
+} );
 
 // Include the necessary function to check plugin activation.
 if (!function_exists('is_plugin_active')) {
